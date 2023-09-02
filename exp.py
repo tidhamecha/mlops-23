@@ -20,8 +20,7 @@ X, y = read_digits()
 
 # 3. Data splitting -- to create train and test sets
 
-# X_train, X_test, y_train, y_test = split_data(X,y, test_size=0.3)
-X_train, X_test, y_train, y_test, X_dev, y_dev = train_test_dev_split(X, y, test_size=0.3, dev_size=0.2)
+X_train, X_test, X_dev, y_train, y_test, y_dev = train_test_dev_split(X, y, test_size=0.3, dev_size=0.2)
 # 4. Data preprocessing
 X_train = preprocess_data(X_train)
 X_test = preprocess_data(X_test)
