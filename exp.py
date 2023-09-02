@@ -14,6 +14,9 @@ hand-written digits, from 0-9.
 # Import datasets, classifiers and performance metrics
 from sklearn import metrics, svm
 from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split
+gamma_ranges = [0.001, 0.01, 0.1, 1, 10, 100]
+C_ranges = [0.1, 1, 2, 5, 10]
+
 
 # 1. Get the dataset
 X, y = read_digits()
@@ -24,12 +27,32 @@ X_train, X_test, X_dev, y_train, y_test, y_dev = train_test_dev_split(X, y, test
 # 4. Data preprocessing
 X_train = preprocess_data(X_train)
 X_test = preprocess_data(X_test)
+X_dev = preprocess_data(X_dev)
 
-# 5. Model training
-model = train_model(X_train, y_train, {'gamma': 0.001}, model_type="svm")
+# HYPER PARAMETER TUNING
+# - take all combinations of gamma and C
+best_acc_so_far = -1
+best_model = None
+for cur_gamma in gamma_ranges:
+    for cur_C in C_ranges:
+        # print("Running for gamma={} C={}".format(cur_gamma, cur_C))
+        # - train model with cur_gamma and cur_C
+        # # 5. Model training
+        cur_model = train_model(X_train, y_train, {'gamma': cur_gamma, 'C': cur_C}, model_type="svm")
+        # - get some performance metric on DEV set
+        cur_accuracy = predict_and_eval(cur_model, X_dev, y_dev)
+        # - select the hparams that yields the best performance on DEV set
+        if cur_accuracy > best_acc_so_far:
+            print("New best accuracy: ", cur_accuracy)
+            best_acc_so_far = cur_accuracy
+            optimal_gamma = cur_gamma
+            optimal_C = cur_C
+            best_model = cur_model
+print("Optimal parameters gamma: ", optimal_gamma, "C: ", optimal_C)
+
 
 # 6. Getting model predictions on test set
-# Predict the value of the digit on the test subset
 # 7. Qualitative sanity check of the predictions
 # 8. Evaluation
-predict_and_eval(model, X_test, y_test)
+test_acc = predict_and_eval(best_model, X_test, y_test)
+print("Test accuracy: ", test_acc)
