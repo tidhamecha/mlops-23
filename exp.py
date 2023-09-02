@@ -17,7 +17,6 @@ from utils import preprocess_data, split_data, train_model, read_digits, predict
 gamma_ranges = [0.001, 0.01, 0.1, 1, 10, 100]
 C_ranges = [0.1, 1, 2, 5, 10]
 
-
 # 1. Get the dataset
 X, y = read_digits()
 
@@ -33,6 +32,8 @@ X_dev = preprocess_data(X_dev)
 # - take all combinations of gamma and C
 best_acc_so_far = -1
 best_model = None
+
+
 for cur_gamma in gamma_ranges:
     for cur_C in C_ranges:
         # print("Running for gamma={} C={}".format(cur_gamma, cur_C))
