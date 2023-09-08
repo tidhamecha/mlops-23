@@ -1,24 +1,65 @@
-name: GitHub Actions Demo
-on: [push]
+# name: GitHub Actions Demo
+# on: [push]
+# jobs:
+#   Explore-GitHub-Actions:
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         python-version: [3.8.1]
+#     steps:
+#       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event on github."
+#       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+#       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+#       - name: Check out repository code
+#         uses: actions/checkout@v2
+#       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+#       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+#       - name: List files in the repository
+#         run: |
+#           ls -r ${{ github.workspace }}
+#       - run: echo "🍏 This job's status is ${{ job.status }}."
+#       - name: Install dep
+#         run:  pip3 install --no-cache-dir -r requirements.txt
+#       - name: Run experiment
+#         run: python exp.py
+name: Run Experiments
+
+on:
+  push:
+
 jobs:
-  Explore-GitHub-Actions:
+  run-experiment:
+    name: Run experiment on Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.8.1]
+
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event on github."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
+      - name: Checkout Code
         uses: actions/checkout@v2
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+
+      - name: Display Information
         run: |
-          ls -r ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-      - name: Install dep
-        run:  pip3 install --no-cache-dir -r requirements.txt
-      - name: Run experiment
-        run: python exp.py
+          echo "🎉 Workflow triggered by a ${{ github.event_name }} event."
+          echo "🔎 Branch: ${{ github.ref }}"
+          echo "📂 Repository: ${{ github.repository }}"
+          echo "🐧 Running on: ${{ runner.os }}"
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: List Files in Workspace
+        run: ls -r ${{ github.workspace }}
+
+      - name: Install Dependencies
+        run: |
+          echo "🚀 Installing dependencies from requirements.txt..."
+          pip install --no-cache-dir -r requirements.txt
+
+      - name: Run Experiment
+        run: |
+          echo "🔥 Running experiment..."
+          python exp.py
