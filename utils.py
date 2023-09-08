@@ -43,3 +43,21 @@ def train_test_dev_split(X, y, test_size, dev_size):
 def predict_and_eval(model, X_test, y_test):
     predicted = model.predict(X_test)    
     return metrics.accuracy_score(y_test, predicted)
+
+def tune_hyper_parameters(train_features, train_labels, dev_features, dev_labels, param_combinations):
+    highest_accuracy = -1
+    best_model = None
+    optimal_gamma_value = None
+    optimal_c_value = None
+
+    for param_set in param_combinations:
+        current_model = train_model(train_features, train_labels, {'gamma': 0.001, 'C': param_set["c_range"]}, model_type="svm")
+        current_accuracy = predict_and_eval(current_model, dev_features, dev_labels)
+
+        if current_accuracy > highest_accuracy:
+            highest_accuracy = current_accuracy
+            optimal_gamma_value = param_set["gamma"]
+            optimal_c_value = param_set["c_range"]
+            best_model = current_model
+            
+    return best_model, highest_accuracy, optimal_gamma_value, optimal_c_value
