@@ -2,6 +2,19 @@ from sklearn.model_selection import train_test_split
 from sklearn import svm, datasets, metrics
 # we will put all utils here
 
+def get_combinations(param_name, param_values, base_combinations):    
+    new_combinations = []
+    for value in param_values:
+        for combination in base_combinations:
+            combination[param_name] = value
+            new_combinations.append(combination.copy())    
+    return new_combinations
+
+def get_hyperparameter_combinations(dict_of_param_lists):    
+    base_combinations = [{}]
+    for param_name, param_values in dict_of_param_lists.items():
+        base_combinations = get_combinations(param_name, param_values, base_combinations)
+    return base_combinations
 
 
 def read_digits():
