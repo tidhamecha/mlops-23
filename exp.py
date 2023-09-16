@@ -13,6 +13,7 @@ hand-written digits, from 0-9.
 
 # Import datasets, classifiers and performance metrics
 from sklearn import metrics, svm
+
 from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split, get_hyperparameter_combinations, tune_hparams
 
 # 1. Get the dataset
@@ -33,12 +34,12 @@ for test_size in test_sizes:
     for dev_size in dev_sizes:
         train_size = 1- test_size - dev_size
         # 3. Data splitting -- to create train and test sets                
-        X_train, X_test, y_train, y_test, X_dev, y_dev = train_test_dev_split(X, y, test_size=test_size, dev_size=dev_size)
+        X_train, X_test, X_dev, y_train, y_test, y_dev = train_test_dev_split(X, y, test_size=test_size, dev_size=dev_size)
         # 4. Data preprocessing
         X_train = preprocess_data(X_train)
         X_test = preprocess_data(X_test)
         X_dev = preprocess_data(X_dev)
-
+    
         best_hparams, best_model, best_accuracy  = tune_hparams(X_train, y_train, X_dev, 
         y_dev, h_params_combinations)
 
