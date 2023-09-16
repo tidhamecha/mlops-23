@@ -16,6 +16,21 @@ def get_hyperparameter_combinations(dict_of_param_lists):
         base_combinations = get_combinations(param_name, param_values, base_combinations)
     return base_combinations
 
+def tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations):
+    best_accuracy = -1
+    for h_params in h_params_combinations:
+        # 5. Model training
+        model = train_model(X_train, y_train, h_params, model_type="svm")
+        # Predict the value of the digit on the test subset        
+        cur_accuracy = predict_and_eval(model, X_dev, y_dev)
+        if cur_accuracy > best_accuracy:
+            best_accuracy = cur_accuracy
+            best_hparams = h_params
+            best_model = model
+
+    return best_hparams, best_model, best_accuracy 
+
+
 
 def read_digits():
     digits = datasets.load_digits()
@@ -55,30 +70,4 @@ def train_test_dev_split(X, y, test_size, dev_size):
 # Question 2:
 def predict_and_eval(model, X_test, y_test):
     predicted = model.predict(X_test)
-    print(
-    f"Classification report for classifier {model}:\n"
-    f"{metrics.classification_report(y_test, predicted)}\n"
-    )
-
-
-    disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-    disp.figure_.suptitle("Confusion Matrix")
-    print(f"Confusion matrix:\n{disp.confusion_matrix}")
-
-
-    # The ground truth and predicted lists
-    y_true = []
-    y_pred = []
-    cm = disp.confusion_matrix
-
-    # For each cell in the confusion matrix, add the corresponding ground truths
-    # and predictions to the lists
-    for gt in range(len(cm)):
-        for pred in range(len(cm)):
-            y_true += [gt] * cm[gt][pred]
-            y_pred += [pred] * cm[gt][pred]
-
-    print(
-        "Classification report rebuilt from confusion matrix:\n"
-        f"{metrics.classification_report(y_true, y_pred)}\n"
-    )
+    return metrics.accuracy_score(y_test, predicted)
