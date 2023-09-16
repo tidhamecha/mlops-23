@@ -36,12 +36,13 @@ X_train, X_test, y_train, y_test, X_dev, y_dev = train_test_dev_split(X, y, test
 # 4. Data preprocessing
 X_train = preprocess_data(X_train)
 X_test = preprocess_data(X_test)
+X_dev = preprocess_data(X_dev)
 
-# 5. Model training
-model = train_model(X_train, y_train, {'gamma': 0.001}, model_type="svm")
+for h_params in h_params_combinations:
+    # 5. Model training
+    model = train_model(X_train, y_train, h_params, model_type="svm")
+    # Predict the value of the digit on the test subset
+    predict_and_eval(model, X_test, y_test)    
+    predict_and_eval(model, X_dev, y_dev)
 
-# 6. Getting model predictions on test set
-# Predict the value of the digit on the test subset
-# 7. Qualitative sanity check of the predictions
-# 8. Evaluation
-predict_and_eval(model, X_test, y_test)
+
