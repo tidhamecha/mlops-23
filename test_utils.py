@@ -33,7 +33,6 @@ def test_data_splitting():
     
     test_size = .1
     dev_size = .6
-    train_size = 1 - test_size - dev_size
 
     X_train, X_test, X_dev, y_train, y_test, y_dev = train_test_dev_split(X, y, test_size=test_size, dev_size=dev_size)
 
