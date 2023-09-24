@@ -15,7 +15,7 @@ hand-written digits, from 0-9.
 from sklearn import metrics, svm
 
 from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split, get_hyperparameter_combinations, tune_hparams
-
+from joblib import dump, load
 # 1. Get the dataset
 X, y = read_digits()
 
@@ -40,8 +40,11 @@ for test_size in test_sizes:
         X_test = preprocess_data(X_test)
         X_dev = preprocess_data(X_dev)
     
-        best_hparams, best_model, best_accuracy  = tune_hparams(X_train, y_train, X_dev, 
-        y_dev, h_params_combinations)
+        best_hparams, best_model_path, best_accuracy  = tune_hparams(X_train, y_train, X_dev, 
+        y_dev, h_params_combinations)        
+    
+        # loading of model         
+        best_model = load(best_model_path) 
 
         test_acc = predict_and_eval(best_model, X_test, y_test)
         train_acc = predict_and_eval(best_model, X_train, y_train)
