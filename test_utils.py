@@ -1,5 +1,5 @@
 from utils import get_hyperparameter_combinations, train_test_dev_split,read_digits, tune_hparams, preprocess_data
-
+import os
 def test_for_hparam_cominations_count():
     # a test case to check that all possible combinations of paramers are indeed generated
     gamma_list = [0.001, 0.01, 0.1, 1]
