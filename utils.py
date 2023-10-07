@@ -17,18 +17,18 @@ def get_hyperparameter_combinations(dict_of_param_lists):
         base_combinations = get_combinations(param_name, param_values, base_combinations)
     return base_combinations
 
-def tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations):
+def tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations, model_type="svm"):
     best_accuracy = -1
     best_model_path = ""
     for h_params in h_params_combinations:
         # 5. Model training
-        model = train_model(X_train, y_train, h_params, model_type="svm")
+        model = train_model(X_train, y_train, h_params, model_type=model_type)
         # Predict the value of the digit on the test subset        
         cur_accuracy = predict_and_eval(model, X_dev, y_dev)
         if cur_accuracy > best_accuracy:
             best_accuracy = cur_accuracy
             best_hparams = h_params
-            best_model_path = "./models/best_model" +"_".join(["{}:{}".format(k,v) for k,v in h_params.items()]) + ".joblib"
+            best_model_path = "./models/{}_".format(model_type) +"_".join(["{}:{}".format(k,v) for k,v in h_params.items()]) + ".joblib"
             best_model = model
 
     # save the best_model    
