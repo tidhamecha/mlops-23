@@ -1,5 +1,5 @@
 from sklearn.model_selection import train_test_split
-from sklearn import svm, datasets, metrics
+from sklearn import svm, tree, datasets, metrics
 from joblib import dump, load
 # we will put all utils here
 
@@ -34,7 +34,6 @@ def tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations, model_ty
     # save the best_model    
     dump(best_model, best_model_path) 
 
-    print("Model save at {}".format(best_model_path))
 
     return best_hparams, best_model_path, best_accuracy 
 
@@ -55,7 +54,7 @@ def preprocess_data(data):
 # Split data into 50% train and 50% test subsets
 def split_data(x, y, test_size, random_state=1):
     X_train, X_test, y_train, y_test = train_test_split(
-    x, y, test_size=test_size,random_state=random_state
+    x, y, test_size=test_size, shuffle = True
     )
     return X_train, X_test, y_train, y_test
 
@@ -64,6 +63,9 @@ def train_model(x, y, model_params, model_type="svm"):
     if model_type == "svm":
         # Create a classifier: a support vector classifier
         clf = svm.SVC
+    if model_type == "tree":
+        # Create a classifier: a decision tree classifier
+        clf = tree.DecisionTreeClassifier
     model = clf(**model_params)
     # train the model
     model.fit(x, y)
