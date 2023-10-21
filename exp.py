@@ -56,7 +56,8 @@ for cur_run_i in range(num_runs):
             X_test = preprocess_data(X_test)
             X_dev = preprocess_data(X_dev)
 
-
+            binary_preds = {}
+            model_preds = {}
             for model_type in classifier_param_dict:
                 current_hparams = classifier_param_dict[model_type]
                 best_hparams, best_model_path, best_accuracy  = tune_hparams(X_train, y_train, X_dev, 
@@ -72,11 +73,19 @@ for cur_run_i in range(num_runs):
                 print("{}\ttest_size={:.2f} dev_size={:.2f} train_size={:.2f} train_acc={:.2f} dev_acc={:.2f} test_acc={:.2f}".format(model_type, test_size, dev_size, train_size, train_acc, dev_acc, test_acc))
                 cur_run_results = {'model_type': model_type, 'run_index': cur_run_i, 'train_acc' : train_acc, 'dev_acc': dev_acc, 'test_acc': test_acc}
                 results.append(cur_run_results)
-            
+                binary_preds[model_type] = y_test == predicted_y
+                model_preds[model_type] = predicted_y
+                
+                print("{}-GroundTruth Confusion metrics".format(model_type))
                 print(metrics.confusion_matrix(y_test, predicted_y))
 
 
+print("svm-tree Confusion metrics".format())
+print(metrics.confusion_matrix(model_preds['svm'], model_preds['tree']))
 
+print("binarized predictions")
+print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree']))
+        
 # print(pd.DataFrame(results).groupby('model_type').describe().T)
                 
 
