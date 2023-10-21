@@ -18,7 +18,7 @@ from utils import preprocess_data, split_data, train_model, read_digits, predict
 from joblib import dump, load
 import pandas as pd
 
-num_runs  = 5
+num_runs  = 1
 # 1. Get the dataset
 X, y = read_digits()
 
@@ -65,14 +65,18 @@ for cur_run_i in range(num_runs):
                 # loading of model         
                 best_model = load(best_model_path) 
 
-                test_acc = predict_and_eval(best_model, X_test, y_test)
-                train_acc = predict_and_eval(best_model, X_train, y_train)
+                test_acc, predicted_y = predict_and_eval(best_model, X_test, y_test)
+                train_acc, _ = predict_and_eval(best_model, X_train, y_train)
                 dev_acc = best_accuracy
 
                 print("{}\ttest_size={:.2f} dev_size={:.2f} train_size={:.2f} train_acc={:.2f} dev_acc={:.2f} test_acc={:.2f}".format(model_type, test_size, dev_size, train_size, train_acc, dev_acc, test_acc))
                 cur_run_results = {'model_type': model_type, 'run_index': cur_run_i, 'train_acc' : train_acc, 'dev_acc': dev_acc, 'test_acc': test_acc}
                 results.append(cur_run_results)
+            
+                print(metrics.confusion_matrix(y_test, predicted_y))
 
-print(pd.DataFrame(results).groupby('model_type').describe().T)
+
+
+# print(pd.DataFrame(results).groupby('model_type').describe().T)
                 
 
