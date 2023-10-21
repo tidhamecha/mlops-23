@@ -84,7 +84,11 @@ print("svm-tree Confusion metrics".format())
 print(metrics.confusion_matrix(model_preds['svm'], model_preds['tree']))
 
 print("binarized predictions")
-print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree']))
+print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False]))
+print("binarized predictions -- normalized over true labels")
+print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False] , normalize='true'))
+print("binarized predictions -- normalized over pred  labels")
+print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False] , normalize='pred'))
         
 # print(pd.DataFrame(results).groupby('model_type').describe().T)
                 
