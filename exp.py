@@ -66,11 +66,11 @@ for cur_run_i in range(num_runs):
                 # loading of model         
                 best_model = load(best_model_path) 
 
-                test_acc, predicted_y = predict_and_eval(best_model, X_test, y_test)
-                train_acc, _ = predict_and_eval(best_model, X_train, y_train)
+                test_acc, test_f1, predicted_y = predict_and_eval(best_model, X_test, y_test)
+                train_acc, train_f1, _ = predict_and_eval(best_model, X_train, y_train)
                 dev_acc = best_accuracy
 
-                print("{}\ttest_size={:.2f} dev_size={:.2f} train_size={:.2f} train_acc={:.2f} dev_acc={:.2f} test_acc={:.2f}".format(model_type, test_size, dev_size, train_size, train_acc, dev_acc, test_acc))
+                print("{}\ttest_size={:.2f} dev_size={:.2f} train_size={:.2f} train_acc={:.2f} dev_acc={:.2f} test_acc={:.2f}, test_f1={:.2f}".format(model_type, test_size, dev_size, train_size, train_acc, dev_acc, test_acc, test_f1))
                 cur_run_results = {'model_type': model_type, 'run_index': cur_run_i, 'train_acc' : train_acc, 'dev_acc': dev_acc, 'test_acc': test_acc}
                 results.append(cur_run_results)
                 binary_preds[model_type] = y_test == predicted_y
