@@ -24,7 +24,7 @@ def tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations, model_ty
         # 5. Model training
         model = train_model(X_train, y_train, h_params, model_type=model_type)
         # Predict the value of the digit on the test subset        
-        cur_accuracy = predict_and_eval(model, X_dev, y_dev)
+        cur_accuracy, _, _ = predict_and_eval(model, X_dev, y_dev)
         if cur_accuracy > best_accuracy:
             best_accuracy = cur_accuracy
             best_hparams = h_params
@@ -83,5 +83,5 @@ def train_test_dev_split(X, y, test_size, dev_size):
 # Question 2:
 def predict_and_eval(model, X_test, y_test):
     predicted = model.predict(X_test)
-    return metrics.accuracy_score(y_test, predicted)
+    return metrics.accuracy_score(y_test, predicted), metrics.f1_score(y_test, predicted, average="macro"), predicted
 
