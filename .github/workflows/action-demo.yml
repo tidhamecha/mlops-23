@@ -24,3 +24,5 @@ jobs:
         run: pytest
       - name: Run experiment
         run: python exp.py
+      - name: build docker iamge
+        run: docker build -t digits:v1 -f docker/Dockerfile .
