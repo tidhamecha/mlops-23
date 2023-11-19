@@ -1,4 +1,4 @@
-from api.app import app
+from app import app
 import pytest
 from sklearn.datasets import fetch_openml
 import numpy as np
