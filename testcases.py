@@ -45,6 +45,9 @@ def get_sample_for_digit(digit):
 
     # Flatten the 2D image to a 1D array
     flattened_sample = sample_image.flatten()
+    #test for digit 7
+    get_sample_for_digit(7)
+    sample_for_digit_7=print(sample_for_digit_7)
 
     return flattened_sample
         
