@@ -1,10 +1,9 @@
 # FROM ubuntu:23.10
-FROM python:3.9.17
+FROM tezzmlops23.azurecr.io/base:v1
 # copy the whole code directory
 COPY . /digits/
 # RUN apt-get update
-# RUN apt-get install -y python3 python3-pip
-RUN pip3 install -r /digits/requirements.txt
+# RUN apt-get install -y python3 python3-pips
 # need python
 # no need for conda or venv
 WORKDIR /digits
