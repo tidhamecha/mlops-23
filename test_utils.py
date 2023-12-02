@@ -69,3 +69,10 @@ def test_lr_model():
     model_path = "./models/lr_sag_solver:sag.joblib"
     model_loaded = load(model_path) 
     assert type(model_loaded) == sklearn.linear_model.LogisticRegression
+
+def test_solver_lr_model():
+    solver_name_of_choice = 'sag'
+    model_path = "./models/lr_sag_solver:{}.joblib".format(solver_name_of_choice)
+    model_loaded = load(model_path) 
+    solver_name = model_loaded.get_params()['solver']    
+    assert solver_name == solver_name_of_choice
