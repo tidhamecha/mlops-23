@@ -40,6 +40,13 @@ h_params_tree['max_depth'] = max_depth_list
 h_params_trees_combinations = get_hyperparameter_combinations(h_params_tree)
 classifier_param_dict['tree'] = h_params_trees_combinations
 
+classifier_param_dict = {}
+# 2.3 Logistic regression
+classifier_param_dict['lr_lbfgs'] = get_hyperparameter_combinations({'solver':['lbfgs']})
+classifier_param_dict['lr_newton-cg'] = get_hyperparameter_combinations({'solver':['newton-cg']})
+classifier_param_dict['lr_saga'] = get_hyperparameter_combinations({'solver':['saga']})
+classifier_param_dict['lr_sag'] = get_hyperparameter_combinations({'solver':['sag']})
+
 
 results = []
 test_sizes =  [0.2]
@@ -76,19 +83,19 @@ for cur_run_i in range(num_runs):
                 binary_preds[model_type] = y_test == predicted_y
                 model_preds[model_type] = predicted_y
                 
-                print("{}-GroundTruth Confusion metrics".format(model_type))
-                print(metrics.confusion_matrix(y_test, predicted_y))
+                # print("{}-GroundTruth Confusion metrics".format(model_type))
+                # print(metrics.confusion_matrix(y_test, predicted_y))
 
 
-print("svm-tree Confusion metrics".format())
-print(metrics.confusion_matrix(model_preds['svm'], model_preds['tree']))
+# print("svm-tree Confusion metrics".format())
+# print(metrics.confusion_matrix(model_preds['svm'], model_preds['tree']))
 
-print("binarized predictions")
-print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False]))
-print("binarized predictions -- normalized over true labels")
-print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False] , normalize='true'))
-print("binarized predictions -- normalized over pred  labels")
-print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False] , normalize='pred'))
+# print("binarized predictions")
+# print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False]))
+# print("binarized predictions -- normalized over true labels")
+# print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False] , normalize='true'))
+# print("binarized predictions -- normalized over pred  labels")
+# print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False] , normalize='pred'))
         
 # print(pd.DataFrame(results).groupby('model_type').describe().T)
                 

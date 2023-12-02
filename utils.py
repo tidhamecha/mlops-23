@@ -1,6 +1,7 @@
 from sklearn.model_selection import train_test_split
 from sklearn import svm, tree, datasets, metrics, preprocessing
 from joblib import dump, load
+from sklearn.linear_model import LogisticRegression
 # we will put all utils here
 
 def get_combinations(param_name, param_values, base_combinations):    
@@ -67,6 +68,11 @@ def train_model(x, y, model_params, model_type="svm"):
     if model_type == "tree":
         # Create a classifier: a decision tree classifier
         clf = tree.DecisionTreeClassifier
+    
+    if model_type == "lr_lbfgs" or model_type == "lr_newton-cg" or model_type == "lr_saga" or model_type == "lr_sag":
+        # Create a classifier: a decision tree classifier
+        clf = LogisticRegression
+            
     model = clf(**model_params)
     # train the model
     model.fit(x, y)
